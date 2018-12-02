@@ -48,10 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	http.authorizeRequests().antMatchers("/css/**", "/js/**", "/fonts/**", "/index").permitAll() // 都可以访问
     			.antMatchers("/h2-console/**").permitAll() // 都可以访问
+				.antMatchers("/api/**").permitAll() // 都可以访问
+				// swagger start
+				.antMatchers("/swagger-ui.html").permitAll()
+				.antMatchers("/swagger-resources/**").permitAll()
+				.antMatchers("/images/**").permitAll()
+				.antMatchers("/webjars/**").permitAll()
+				.antMatchers("/v2/api-docs").permitAll()
+				.antMatchers("/configuration/ui").permitAll()
+				.antMatchers("/configuration/security").permitAll()
 
-				.antMatchers("swagger-ui.html").permitAll()
-				.antMatchers("classpath:/META-INF/resources/").permitAll()
-				.antMatchers("classpath:/META-INF/resources/webjars/").permitAll()
 
     			.antMatchers("/admins/**").hasRole("ADMIN") // 需要相应的角色才能访问
     			.and()
