@@ -40,6 +40,17 @@ public class Swagger2 {
                 .apis(RequestHandlerSelectors.basePackage("com.example.demo18.Service"))
                 .paths(PathSelectors.any()).build();
     }
+
+    @Bean
+    public Docket UsersApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Users接口")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.waylau.spring.boot.blog.api"))
+                .paths(PathSelectors.any()).build();
+    }
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("APi接口")

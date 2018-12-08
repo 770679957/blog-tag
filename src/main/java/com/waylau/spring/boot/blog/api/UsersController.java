@@ -1,23 +1,15 @@
 package com.waylau.spring.boot.blog.api;
 
-import com.waylau.spring.boot.blog.domain.Authority;
-import com.waylau.spring.boot.blog.domain.User;
+import com.waylau.spring.boot.blog.domain.MyTest;
 import com.waylau.spring.boot.blog.service.AuthorityService;
 import com.waylau.spring.boot.blog.service.UserService;
-import com.waylau.spring.boot.blog.util.ConstraintViolationExceptionHandler;
 import com.waylau.spring.boot.blog.vo.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
-
-import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Api(tags="用户管理")
@@ -33,8 +25,7 @@ public class UsersController {
 	@Autowired
 	private AuthorityService authorityService;
 
-    @RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
-    @ResponseBody
+/*    @RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
 	@ApiOperation(value="用户注册",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,paramType="form"),
@@ -56,12 +47,11 @@ public class UsersController {
 		}
 
 		return ResponseEntity.ok().body(new Response(true, "处理成功", user));
-	}
+	}*/
 
     //测试swagger
-    @RequestMapping(value = "/test/sw/{num}", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation(value = "测试Swagger", notes = "测试SwaggerNotes", tags = {""}, response = String.class)
+    @RequestMapping(value = "/test/sw/{num}", method = RequestMethod.POST)
+    @ApiOperation(value = "测试Swagger", response = String.class)
     @ApiImplicitParams({
             @ApiImplicitParam(value = "测试字符串", name = "str", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(value = "测试数字", name = "num", required = true, dataType = "int", paramType = "path"),
@@ -69,6 +59,24 @@ public class UsersController {
     public String swaggerTest(@RequestParam String str,@PathVariable Integer num){
         return str + num.toString();
     }
+
+
+
+	@ApiOperation(value = "测试MyTest")
+	@ApiImplicitParams({
+			@ApiImplicitParam(value = "测试字符串", name = "name", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(value = "测试数字", name = "password", required = true, dataType = "String", paramType = "query"),
+	})
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public Response test(MyTest test) {
+		Response rsponse = new Response();
+		rsponse.setCode(200);
+		rsponse.setMessage("请求成功！");
+		rsponse.setBody(test);
+		return  rsponse;
+	}
+
+
 
 
 }

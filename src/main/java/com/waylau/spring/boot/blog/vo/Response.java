@@ -34,7 +34,10 @@ public class Response {
     public Integer getCode() {  return code; }
     public void setCode(Integer code) { this.code = code; }
 
-    public Response(boolean success, String message) {
+	public Response() {
+	}
+
+	public Response(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
