@@ -1,15 +1,26 @@
 package com.waylau.spring.boot.blog.api;
 
+import com.waylau.spring.boot.blog.condition.UserCondition;
+import com.waylau.spring.boot.blog.domain.Authority;
 import com.waylau.spring.boot.blog.domain.MyTest;
+import com.waylau.spring.boot.blog.domain.User;
 import com.waylau.spring.boot.blog.service.AuthorityService;
 import com.waylau.spring.boot.blog.service.UserService;
+import com.waylau.spring.boot.blog.util.ConstraintViolationExceptionHandler;
 import com.waylau.spring.boot.blog.vo.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Api(tags="用户管理")
@@ -25,16 +36,22 @@ public class UsersController {
 	@Autowired
 	private AuthorityService authorityService;
 
-/*    @RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
+
 	@ApiOperation(value="用户注册",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,paramType="form"),
-			@ApiImplicitParam(name="email",value="邮箱",required=true,paramType="form"),
-			@ApiImplicitParam(name="password",value="登录时密码",required=true,paramType="form"),
-			@ApiImplicitParam(name="name",value="姓名",required=true,paramType="form")
+			@ApiImplicitParam(name="id",value="用户id,(修改时必填)",dataType = "long",paramType="query"),
+			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="email",value="邮箱",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="password",value="登录时密码",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="name",value="姓名",required=true,dataType = "String",paramType="query")
 			//@ApiImplicitParam(name="name",value="姓名",required=true,paramType="form",dataType="Integer")
 	})
-    public ResponseEntity<Response> saveOrUpate(@ApiIgnore @ModelAttribute User user) {
+	@RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
+    public ResponseEntity<Response> saveOrUpate(UserCondition userCondition) {
+
+	    User user = new User();
+
+	    BeanUtils.copyProperties(userCondition ,user);
 
 		List<Authority> authorities = new ArrayList<>();
 		authorities.add(authorityService.getAuthorityById(ROLE_USER_AUTHORITY_ID).get());
@@ -47,7 +64,26 @@ public class UsersController {
 		}
 
 		return ResponseEntity.ok().body(new Response(true, "处理成功", user));
+	}
+
+/*	@ApiOperation(value="用户注册",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name="id",value="用户账号，用户登录时的唯一标识",required=true,dataType = "long",paramType="query"),
+			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="email",value="邮箱",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="password",value="登录时密码",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="name",value="姓名",required=true,dataType = "String",paramType="query")
+			//@ApiImplicitParam(name="name",value="姓名",required=true,paramType="form",dataType="Integer")
+	})
+	@RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
+    public Response saveOrUpate(@ApiIgnore @ModelAttribute UserCondition userCondition) {
+		Response rsponse = new Response();
+		rsponse.setCode(200);
+		rsponse.setMessage("请求成功！");
+		rsponse.setBody(userCondition);
+		return  rsponse;
 	}*/
+
 
     //测试swagger
     @RequestMapping(value = "/test/sw/{num}", method = RequestMethod.POST)
@@ -67,8 +103,8 @@ public class UsersController {
 			@ApiImplicitParam(value = "测试字符串", name = "name", required = true, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(value = "测试数字", name = "password", required = true, dataType = "String", paramType = "query"),
 	})
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public Response test(MyTest test) {
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	public Response test(@ApiIgnore @ModelAttribute MyTest test) {
 		Response rsponse = new Response();
 		rsponse.setCode(200);
 		rsponse.setMessage("请求成功！");
