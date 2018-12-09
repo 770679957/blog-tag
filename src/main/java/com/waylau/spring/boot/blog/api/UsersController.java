@@ -36,6 +36,17 @@ public class UsersController {
 	@Autowired
 	private AuthorityService authorityService;
 
+	@ApiOperation(value="用户登陆",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,dataType = "String",paramType="query"),
+			@ApiImplicitParam(name="password",value="登录时密码",required=true,dataType = "String",paramType="query"),
+	})
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+
+		return "login";
+	}
+
 
 	@ApiOperation(value="用户注册",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
 	@ApiImplicitParams({
@@ -65,25 +76,6 @@ public class UsersController {
 
 		return ResponseEntity.ok().body(new Response(true, "处理成功", user));
 	}
-
-/*	@ApiOperation(value="用户注册",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name="id",value="用户账号，用户登录时的唯一标识",required=true,dataType = "long",paramType="query"),
-			@ApiImplicitParam(name="username",value="用户账号，用户登录时的唯一标识",required=true,dataType = "String",paramType="query"),
-			@ApiImplicitParam(name="email",value="邮箱",required=true,dataType = "String",paramType="query"),
-			@ApiImplicitParam(name="password",value="登录时密码",required=true,dataType = "String",paramType="query"),
-			@ApiImplicitParam(name="name",value="姓名",required=true,dataType = "String",paramType="query")
-			//@ApiImplicitParam(name="name",value="姓名",required=true,paramType="form",dataType="Integer")
-	})
-	@RequestMapping(value = "/saveOrUpate", method = RequestMethod.POST)
-    public Response saveOrUpate(@ApiIgnore @ModelAttribute UserCondition userCondition) {
-		Response rsponse = new Response();
-		rsponse.setCode(200);
-		rsponse.setMessage("请求成功！");
-		rsponse.setBody(userCondition);
-		return  rsponse;
-	}*/
-
 
     //测试swagger
     @RequestMapping(value = "/test/sw/{num}", method = RequestMethod.POST)
