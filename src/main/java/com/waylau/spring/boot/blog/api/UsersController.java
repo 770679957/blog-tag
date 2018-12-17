@@ -2,7 +2,7 @@ package com.waylau.spring.boot.blog.api;
 
 import com.waylau.spring.boot.blog.condition.UserCondition;
 import com.waylau.spring.boot.blog.domain.Authority;
-import com.waylau.spring.boot.blog.domain.MyTest;
+import com.waylau.spring.boot.blog.domain.MyUser;
 import com.waylau.spring.boot.blog.domain.User;
 import com.waylau.spring.boot.blog.service.AuthorityService;
 import com.waylau.spring.boot.blog.service.UserService;
@@ -15,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,6 +36,9 @@ public class UsersController {
 	private UserService userService;
 
 	@Autowired
+	private UserDetailsService userDetailsService;
+
+	@Autowired
 	private AuthorityService authorityService;
 
 	@ApiOperation(value="用户登陆",notes="手机号、密码都是必输项，年龄随边填，但必须是数字")
@@ -42,9 +47,13 @@ public class UsersController {
 			@ApiImplicitParam(name="password",value="登录时密码",required=true,dataType = "String",paramType="query"),
 	})
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-
-		return "login";
+	public Response login(@ApiIgnore @ModelAttribute MyUser user) {
+		Response rsponse = new Response();
+		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+		rsponse.setCode(200);
+		rsponse.setMessage("请求成功！");
+		rsponse.setBody(userDetails);
+		return  rsponse;
 	}
 
 
@@ -92,11 +101,11 @@ public class UsersController {
 
 	@ApiOperation(value = "测试MyTest")
 	@ApiImplicitParams({
-			@ApiImplicitParam(value = "测试字符串", name = "name", required = true, dataType = "String", paramType = "query"),
+			@ApiImplicitParam(value = "测试字符串", name = "username", required = true, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(value = "测试数字", name = "password", required = true, dataType = "String", paramType = "query"),
 	})
 	@RequestMapping(value = "/test", method = RequestMethod.POST)
-	public Response test(@ApiIgnore @ModelAttribute MyTest test) {
+	public Response test(@ApiIgnore @ModelAttribute MyUser test) {
 		Response rsponse = new Response();
 		rsponse.setCode(200);
 		rsponse.setMessage("请求成功！");
